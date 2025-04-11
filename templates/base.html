@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Garment Recognition System{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #F5F7FA;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #003087;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .sidebar .logo img {
+            height: 40px;
+            width: auto;
+            margin-right: 10px;
+        }
+        .sidebar .logo h2 {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            color: #E0E7FF;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #005EB8;
+        }
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+            background-color: #F5F7FA;
+        }
+        .header {
+            background-color: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #003087;
+        }
+        .header .user-info {
+            font-size: 14px;
+            color: #555;
+        }
+        .header .menu-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .flash-message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .flash-message.error {
+            background-color: #FFEFEF;
+            color: #D32F2F;
+        }
+        .flash-message.success {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .header .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Logo">
+            <h2>GRS</h2>
+        </div>
+        <ul>
+            <li><a href="{{ url_for('home') }}" {% if request.endpoint == 'home' %}class="active"{% endif %}><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url_for('upload_file') }}" {% if request.endpoint == 'upload_file' %}class="active"{% endif %}><i class="fas fa-upload"></i> Upload Garment</a></li>
+            <li><a href="{{ url_for('results') }}" {% if request.endpoint == 'results' %}class="active"{% endif %}><i class="fas fa-search"></i> View Results</a></li>
+            <li><a href="{{ url_for('search') }}" {% if request.endpoint == 'search' %}class="active"{% endif %}><i class="fas fa-search"></i> Text Search</a></li>
+            {% if session.get('role') == 'admin' %}
+            <li><a href="{{ url_for('admin_panel') }}" {% if request.endpoint == 'admin_panel' %}class="active"{% endif %}><i class="fas fa-user-shield"></i> Admin Panel</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('history') }}" {% if request.endpoint == 'history' %}class="active"{% endif %}><i class="fas fa-history"></i> History</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="header">
+            <div class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <h1>{% block header %}{% endblock %}</h1>
+            <div class="user-info">
+                Welcome, {{ session.get('username', 'User') }} ({{ session.get('role', 'User') }})
+            </div>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

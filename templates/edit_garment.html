@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Edit Garment - Garment Recognition System{% endblock %}
+{% block header %}Edit Garment{% endblock %}
+{% block content %}
+<style>
+    .form-section {
+        max-width: 100%; /* Full width on mobile */
+        margin: 0 10px; /* Small margins */
+        background-color: white;
+        padding: 20px; /* Reduced padding */
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-section h3 {
+        color: #003087;
+        margin-bottom: 15px;
+        font-size: 18px; /* Smaller header */
+    }
+    .form-section form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Reduced gap */
+    }
+    .form-section input,
+    .form-section select {
+        padding: 10px; /* Reduced padding */
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        width: 100%; /* Full width */
+    }
+    .button {
+        background-color: #005EB8;
+        color: white;
+        padding: 10px; /* Reduced padding */
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px; /* Smaller font */
+        transition: background-color 0.3s;
+        width: 100%; /* Full width on mobile */
+    }
+    .button:hover {
+        background-color: #003087;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+        .form-section {
+            margin: 0 5px;
+            padding: 10px;
+        }
+        .form-section h3 {
+            font-size: 16px;
+        }
+        .form-section input,
+        .form-section select,
+        .button {
+            font-size: 12px;
+            padding: 8px;
+        }
+    }
+</style>
+<div class="form-section">
+    <h3>Edit Garment</h3>
+    <form method="post" action="{{ url_for('edit_garment', dbid=garment['DBID']) }}" enctype="multipart/form-data">
+        <input type="text" name="product_id" placeholder="Product ID" value="{{ garment['Product ID'] }}" required>
+        <input type="text" name="description" placeholder="Description" value="{{ garment['Description'] }}" required>
+        <input type="text" name="fabric_type" placeholder="Fabric Type" value="{{ garment['Fabric Type'] }}" required>
+        <input type="text" name="color" placeholder="Color" value="{{ garment['Color'] }}" required>
+        <input type="text" name="buyer_name" placeholder="Buyer Name" value="{{ garment['Buyer Name'] }}" required>
+        <input type="text" name="qty_moq" placeholder="QTY (MOQ)" value="{{ garment.get('QTY (MOQ)', '') }}">
+        <input type="text" name="season" placeholder="Season" value="{{ garment.get('Season', '') }}">
+        <select name="category" required>
+            <option value="Upper Wear" {% if garment['Category'] == 'Upper Wear' %}selected{% endif %}>Upper Wear</option>
+            <option value="Lower Wear" {% if garment['Category'] == 'Lower Wear' %}selected{% endif %}>Lower Wear</option>
+            <option value="Dress" {% if garment['Category'] == 'Dress' %}selected{% endif %}>Dress</option>
+            <option value="Jacket" {% if garment['Category'] == 'Jacket' %}selected{% endif %}>Jacket</option>
+        </select>
+        <p>Current Image: <img src="{{ garment['Image_URL'] }}" alt="Garment" style="width: 100px; height: 100px; object-fit: cover;"></p>
+        <input type="file" name="image" accept="image/*">
+        <input type="submit" value="Update Garment" class="button">
+    </form>
+</div>
+{% endblock %}

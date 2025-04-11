@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Upload Garment - Garment Recognition System{% endblock %}
+{% block header %}Upload Garment{% endblock %}
+{% block content %}
+<style>
+    .upload-section {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .upload-section h2 {
+        color: #003087;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+    .file-input {
+        margin-bottom: 20px;
+    }
+    .file-input input[type="file"] {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 100%;
+    }
+    .garment-type {
+        margin-bottom: 20px;
+    }
+    .garment-type label {
+        display: block;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+    .garment-type select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    .button {
+        background-color: #005EB8;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+    .button:hover {
+        background-color: #003087;
+    }
+</style>
+<div class="upload-section">
+    <h2>Upload Garment Image</h2>
+    <form id="uploadForm" method="post" action="/upload" enctype="multipart/form-data">
+        <div class="file-input">
+            <input type="file" name="file" accept="image/*" required>
+        </div>
+        <div class="garment-type">
+            <label for="garmentType">Garment Type:</label>
+            <select id="garmentType" name="garment_type">
+                <option value="dress">Dress</option>
+                <option value="top">Top</option>
+                <option value="shirt">Shirt</option>
+                <option value="pants">Pants</option>
+                <option value="jacket">Jacket</option>
+            </select>
+        </div>
+        <input type="submit" value="Upload and Find Similar" class="button">
+    </form>
+</div>
+{% endblock %}

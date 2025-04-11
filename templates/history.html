@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}History - Garment Recognition System{% endblock %}
+{% block header %}Search History{% endblock %}
+{% block content %}
+<style>
+    .table-container {
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #003087;
+        color: white;
+    }
+    tr:hover {
+        background-color: #F9FBFF;
+    }
+    .no-history {
+        background-color: #FFEFEF;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        color: #D32F2F;
+        font-size: 16px;
+    }
+</style>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Garment Type</th>
+                <th>Result Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if history %}
+                {% for entry in history %}
+                <tr>
+                    <td>{{ entry[0] }}</td>
+                    <td>{{ entry[1] }}</td>
+                    <td>{{ entry[2] }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" class="no-history">No search history available.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

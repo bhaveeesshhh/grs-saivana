@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Welcome to the Garment Recognition System</h2>
+<p>This system allows you to upload garment images and find similar items from our database.</p>
+<div class="welcome-section">
+    <p><strong>Features:</strong></p>
+    <ul>
+        <li>Upload an image to search for similar garments.</li>
+        <li>Filter results by color, category, and buyer name.</li>
+        <li>Select garments across multiple pages and generate a PDF report.</li>
+        <li>View garment images in full screen.</li>
+        <li>Admin panel for managing the dataset and viewing search history.</li>
+    </ul>
+    <a href="{{ url_for('upload_file') }}" class="btn">Get Started</a>
+</div>
+{% endblock %}

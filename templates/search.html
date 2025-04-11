@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Search Garments - Garment Recognition System{% endblock %}
+{% block header %}Text Search{% endblock %}
+{% block content %}
+<style>
+    .search-section {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .search-section h2 {
+        color: #003087;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+    .search-input {
+        margin-bottom: 20px;
+    }
+    .search-input input[type="text"] {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 100%;
+        font-size: 14px;
+    }
+    .filter-options {
+        margin-bottom: 20px;
+    }
+    .filter-options label {
+        display: block;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+    .filter-options select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    .button {
+        background-color: #005EB8;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+    .button:hover {
+        background-color: #003087;
+    }
+</style>
+<div class="search-section">
+    <h2>Search Garments by Text</h2>
+    <form method="post" action="{{ url_for('search') }}">
+        <div class="search-input">
+            <input type="text" name="query" placeholder="Enter keywords (e.g., 'red dress', 'cotton shirt')" required>
+        </div>
+        <div class="filter-options">
+            <label for="category">Category (Optional):</label>
+            <select id="category" name="category">
+                <option value="">Any Category</option>
+                <option value="Upper Wear">Upper Wear</option>
+                <option value="Lower Wear">Lower Wear</option>
+                <option value="Dress">Dress</option>
+                <option value="Jacket">Jacket</option>
+            </select>
+        </div>
+        <div class="filter-options">
+            <label for="fabric">Fabric Type (Optional):</label>
+            <select id="fabric" name="fabric">
+                <option value="">Any Fabric</option>
+                <option value="Cotton">Cotton</option>
+                <option value="Polyester">Polyester</option>
+                <option value="Wool">Wool</option>
+                <option value="Silk">Silk</option>
+            </select>
+        </div>
+        <input type="submit" value="Search" class="button">
+    </form>
+</div>
+{% endblock %}

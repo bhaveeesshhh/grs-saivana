@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel - Garment Recognition System{% endblock %}
+{% block header %}Admin Panel{% endblock %}
+{% block content %}
+<style>
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #E0E7FF;
+        margin-bottom: 30px;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .tab {
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #555;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s;
+        flex-shrink: 0;
+    }
+    .tab.active {
+        color: #003087;
+        border-bottom: 2px solid #003087;
+    }
+    .tab-content {
+        display: none;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .tab-content.active {
+        display: block;
+    }
+    .form-section {
+        max-width: 100%;
+        margin: 0 10px;
+        padding: 15px;
+    }
+    .form-section h3 {
+        color: #003087;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+    .form-section form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .form-section input,
+    .form-section select {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        width: 100%;
+    }
+    .button {
+        background-color: #005EB8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+        width: auto;
+        margin: 5px 0;
+    }
+    .button:hover {
+        background-color: #003087;
+    }
+    .table-container {
+        overflow-x: auto;
+        width: 100%;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-width: 600px;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+    th {
+        background-color: #003087;
+        color: white;
+    }
+    tr:hover {
+        background-color: #F9FBFF;
+    }
+    .action-buttons a {
+        color: #005EB8;
+        margin-right: 8px;
+        text-decoration: none;
+        font-size: 12px;
+    }
+    .action-buttons a:hover {
+        text-decoration: underline;
+    }
+
+    /* Bulk Upload Specific Styling */
+    .bulk-upload-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .bulk-upload-form .button {
+        align-self: flex-start;
+        margin-top: 10px;
+    }
+    .bulk-upload-form p {
+        margin: 10px 0;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+        .tabs {
+            padding: 0 10px;
+        }
+        .tab {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+        .form-section {
+            margin: 0 5px;
+            padding: 10px;
+        }
+        .form-section input,
+        .form-section select,
+        .button {
+            font-size: 12px;
+            padding: 8px;
+        }
+        table {
+            min-width: 400px;
+        }
+        th, td {
+            font-size: 10px;
+            padding: 8px;
+        }
+        .action-buttons a {
+            font-size: 10px;
+            margin-right: 5px;
+        }
+        .bulk-upload-form .button {
+            width: 100%;
+        }
+    }
+</style>
+<div class="tabs">
+    <div class="tab active" onclick="showTab('add-single')">Add Single Garment</div>
+    <div class="tab" onclick="showTab('bulk-upload')">Bulk Upload</div>
+    <div class="tab" onclick="showTab('manage-garments')">Manage Garments</div>
+</div>
+<div id="add-single" class="tab-content active">
+    <div class="form-section">
+        <h3>Add New Garment</h3>
+        <form method="post" action="/add_garment" enctype="multipart/form-data">
+            <input type="text" name="product_id" placeholder="Product ID" required>
+            <input type="text" name="description" placeholder="Description" required>
+            <input type="text" name="fabric_type" placeholder="Fabric Type" required>
+            <input type="text" name="color" placeholder="Color" required>
+            <input type="text" name="buyer_name" placeholder="Buyer Name" required>
+            <input type="text" name="qty_moq" placeholder="QTY (MOQ)" optional>
+            <input type="text" name="season" placeholder="Season" optional>
+            <select name="category" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="Upper Wear">Upper Wear</option>
+                <option value="Lower Wear">Lower Wear</option>
+                <option value="Dress">Dress</option>
+                <option value="Jacket">Jacket</option>
+            </select>
+            <input type="file" name="image" accept="image/*" required>
+            <input type="submit" value="Add Garment" class="button">
+        </form>
+    </div>
+</div>
+<div id="bulk-upload" class="tab-content">
+    <div class="form-section">
+        <h3>Bulk Upload Garments</h3>
+        <p>Download the template, fill in your garment data, embed images in the "Image" column, and upload the file below.</p>
+        <p><a href="{{ url_for('download_template') }}" class="button">Download Template</a></p>
+        <form method="post" action="/bulk_upload" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx" required>
+            <input type="submit" value="Upload Excel File" class="button">
+        </form>
+    </div>
+</div>
+<div id="manage-garments" class="tab-content">
+    <h3>Manage Garments</h3>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>DBID</th>
+                    <th>Product ID</th>
+                    <th>Description</th>
+                    <th>Fabric Type</th>
+                    <th>Color</th>
+                    <th>Buyer Name</th>
+                    <th>Category</th>
+                    <th>QTY (MOQ)</th>
+                    <th>Season</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in garments.iterrows() %}
+                <tr>
+                    <td>{{ row['DBID'] }}</td>
+                    <td>{{ row['Product ID'] }}</td>
+                    <td>{{ row['Description'] }}</td>
+                    <td>{{ row['Fabric Type'] }}</td>
+                    <td>{{ row['Color'] }}</td>
+                    <td>{{ row['Buyer Name'] }}</td>
+                    <td>{{ row['Category'] }}</td>
+                    <td>{{ row.get('QTY (MOQ)', '') }}</td>
+                    <td>{{ row.get('Season', '') }}</td>
+                    <td><img src="{{ row['Image_URL'] }}" alt="Garment" style="width: 100px; height: 100px; object-fit: cover;"></td>
+                    <td class="action-buttons">
+                        <a href="{{ url_for('edit_garment', dbid=row['DBID']) }}">Edit</a>
+                        <a href="{{ url_for('delete_garment', dbid=row['DBID']) }}" onclick="return confirm('Are you sure you want to delete this garment?');">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function showTab(tabId) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.querySelector(`.tab[onclick="showTab('${tabId}')"]`).classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+</script>
+{% endblock %}

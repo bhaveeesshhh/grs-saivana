@@ -1,0 +1,7 @@
+.results-container .results-grid {
+    margin-bottom: 2rem;
+}
+
+.results-container .result-card img.thumbnail:hover {
+    opacity: 0.8;
+}

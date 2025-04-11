@@ -1,0 +1,11 @@
+.admin-container {
+    max-width: 1200px;
+}
+
+.admin-section {
+    margin-bottom: 2rem;
+}
+
+.admin-section table {
+    margin-top: 0;
+}
