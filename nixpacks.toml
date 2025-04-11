@@ -1,2 +1,5 @@
+[phases.setup]
+nixPkgs = ['libglvnd', 'libgl', 'mesa', 'xorg.libX11']
+
 [start]
 cmd = "python app.py"
